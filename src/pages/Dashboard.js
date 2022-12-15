@@ -1,8 +1,12 @@
-import Wrapper from '../assets/wrappers/DashboardFormPage';
+import Wrapper from '../assets/wrappers/DashboardFormPage.js';
 import { Logo } from '../components';
 const Dashboard = () => {
-  <Wrapper>
-    <Logo />
-  </Wrapper>;
+  return (
+    <Wrapper>
+      <nav>
+        <Logo />
+      </nav>
+    </Wrapper>
+  );
 };
 export default Dashboard;
