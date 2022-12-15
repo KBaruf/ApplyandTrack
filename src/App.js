@@ -1,6 +1,10 @@
-import logo from './assets/images/logo.svg';
+import Landing from './pages/Landing';
 function App() {
-  return <h1>Apply and Track</h1>;
+  return (
+    <>
+      <Landing />
+    </>
+  );
 }
 
 export default App;
