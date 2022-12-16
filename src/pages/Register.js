@@ -1,7 +1,16 @@
 import { Logo, FormRow } from '../components';
 import Wrapper from '../assets/wrappers/RegisterPage';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import { loginUser, registerUser } from '../features/user/userSlice';
+import { useNavigate } from 'react-router-dom';
 const Register = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isLoading, user } = useSelector((store) => store.user);
+
   const initialState = {
     name: '',
     email: '',
@@ -13,11 +22,19 @@ const Register = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     if (!values.email || !values.password || (!values.isMember && !values.name)) {
-      console.log('text input empty');
+      toast.error('Please fill out all fields');
       return;
     }
     const { name, email, password, isMember } = values;
-    setValues(initialState);
+    if (isMember) {
+      dispatch(loginUser({ email: email, password: password }));
+    }
+    if (!isMember) {
+      dispatch(registerUser({ name: name, email: email, password: password }));
+      return;
+    }
+
+    user && setValues(initialState);
   };
 
   const handleChange = (e) => {
@@ -38,6 +55,15 @@ const Register = () => {
       });
     }
   };
+  // navigate to dashboard if user is available
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 3000);
+    }
+  }, [user, navigate]);
+
   return (
     <Wrapper className='full-page'>
       <form className='form' onSubmit={onSubmit}>
@@ -50,12 +76,12 @@ const Register = () => {
         <p>
           {values.isMember ? 'Not a member yet?' : 'Already a member?'}
 
-          <button type='button' onClick={toggleMember} className='member-btn'>
+          <button type='button' onClick={toggleMember} className='member-btn' disabled={isLoading}>
             {values.isMember ? 'Register' : 'Login'}
           </button>
         </p>
         <button type='submit' className='btn btn-block'>
-          submit
+          {isLoading ? 'loading' : 'submit'}
         </button>
       </form>
     </Wrapper>
