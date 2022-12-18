@@ -37,6 +37,16 @@ export const clearStore = createAsyncThunk('user/loginUser', async (user, thunkA
 const userSlice = createSlice({
   name: 'user',
   initialState,
+  reducers: {
+    toggleSidebar: (state) => {
+      state.isSidebarOpen = !state.isSidebarOpen;
+    },
+    logoutUser: (state) => {
+      state.user = null;
+      state.isSidebarOpen = false;
+      removeUserFromLocalStorage();
+    },
+  },
   extraReducers: {
     [registerUser.fulfilled]: (state, { payload }) => {
       const { user } = payload;
@@ -63,16 +73,6 @@ const userSlice = createSlice({
     [loginUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
       toast.error(payload);
-    },
-  },
-  reducers: {
-    toggleSidebar: (state) => {
-      state.isSidebarOpen = !state.isSidebarOpen;
-    },
-    logoutUser: (state) => {
-      state.user = null;
-      state.isSidebarOpen = false;
-      removeUserFromLocalStorage();
     },
   },
 });
