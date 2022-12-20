@@ -22,7 +22,7 @@ export const SmallSidebar = () => {
             <Logo />
           </header>
           <div className='nav-links'>
-            <NavLinks />
+            <NavLinks toggleSidebar={toggle} />
           </div>
         </div>
       </div>
